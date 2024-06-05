@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+
+<body>
+
+
+    <h1>Member List</h1>
+    <button id="loadMembers">Load Members</button>
+    <ul id="memberList"></ul>
+
+    <script>
+        $(document).ready(function() {
+            $('#loadMembers').click(function() {
+                $.ajax({
+                    url: '/user/list',
+                    method: 'GET',
+                    success: function(data) {
+                    	console.log("data:",data);
+                        $('#memberList').empty();
+                        data.forEach(function(user) {
+                            $('#memberList').append('<li>' + user.name + ' (' + user.phone + ')</li>');
+                        });
+                    },
+                    error: function(error) {
+                        console.log('Error:', error);
+                    }
+                });
+            });
+        });
+    </script>
+
+
+
+<!--
+	에이작스 통신
+	$.ajax({
+	    url: '접속할 페이지 주소',
+	    type: '전송 방식 (GET / POST)',
+	    data: '전송할 데이터 - 파라미터 문자열 key=value&key=value',
+	    dataType: '요청한 데이터 형식 (html / xml / json / jsonp)',
+	    timeout : '밀리세컨드단위 제한시간',
+	    cache : '이전요청에대한 캐쉬저장여부 (true=사용함, false=사용안함)',
+	    succes: function(data){ 
+	        // 전송에 성공하면 이 콜백 함수를 실행 (data 에는 응답받은 데이터가 저장된다)
+	    },
+	    error: function(){
+	        // 전송에 실패하면 이 콜백 함수를 실행
+	    }
+	});
+-->
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,32 @@
+spring:  
+  datasource:
+    
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  #springfox 스웨거 적용
+  #mvc:
+  #  pathmatch:
+  #    matching-strategy: ant_path_matcher
+  
+#springdoc 스웨거 적용
+springdoc:
+  packages-to-scan: com.example.demo.controller #검색할 패키지를 정의
+  #show-actuator: false
+  model-and-view-allowed: true #ModelAndView  허용
+  ##paths-to-match : /** 
+  default-consumes-media-type: application/json;charset=UTF-8 # 요청 콘텐츠의 기본 미디어 유형을 설정합니다.
+  default-produces-media-type: application/json;charset=UTF-8 # 응답 콘텐츠의 기본 미디어 유형을 설정합니다.
+  swagger-ui:
+    path: / #Swagger UI에 액세스하기 위한 경로를 설정합니다.
+    disable-swagger-default-url: true #파라미터 미설정시 표현할 defaultUrl 설정
+    display-request-duration: true  # try it out 을 했을 때 request duration 을 추가로 찍어줌
+    operations-sorter: alpha #컨트롤러 내에서 정의한 api 메서드 순, alpha(알파벳 오름차순), method(Http 메소드 순)
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.example.demo.domain
+  
+  
+  
+  
+  
+  
