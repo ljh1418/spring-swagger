@@ -1,61 +1,63 @@
 <!DOCTYPE html>
-<html>
-<head>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/defaultLayout}"
+      > <!-- layout:fragment="content" 해당 html 전체를 content 영역 사용 -> 여기에 선언하면 html 선언x --> 
 <meta charset="UTF-8">
-<title>Insert title here</title>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-</head>
-
-<body>
+<title>MAIN HTML</title>
 
 
-    <h1>Member List</h1>
-    <button id="loadMembers">Load Members</button>
+
+
+<th:block layout:fragment="content">
+
+	<a href="/crud/listPage">crud list 페이지</a> |
+	<a href="/crud/insertPage">crud insert 페이지</a>
+
+	<h1>layout:fragment="content" 입력주고 레이아웃 사용</h1>
+	<button id="loadMembers">loadMembers</button>
     <ul id="memberList"></ul>
-
-    <script>
-        $(document).ready(function() {
-            $('#loadMembers').click(function() {
-                $.ajax({
-                    url: '/user/list',
-                    method: 'GET',
-                    success: function(data) {
-                    	console.log("data:",data);
-                        $('#memberList').empty();
-                        data.forEach(function(user) {
-                            $('#memberList').append('<li>' + user.name + ' (' + user.phone + ')</li>');
-                        });
-                    },
-                    error: function(error) {
-                        console.log('Error:', error);
-                    }
-                });
+    <button id="reset">원복</button>
+    <div id="response"></div>
+    <ul id="memberList"></ul>
+    
+    	<script>
+		// contentType : 요청시 서버로 전송하는 데이터 유형
+		// dataType : 서버로부터 받는 데이터 유형 -> json 입력하면 알아서 json형태로 파싱 
+		// type, method : POST,GET,PUT,DELETE
+		$(document).ready(() => {
+			$('#loadMembers').click(function() {
+				$.ajax({
+	                type: 'POST',
+	                url: '/user/list',
+	                contentType: 'application/json',
+	                dataType : 'json',
+	                success: function(response) {
+	                	console.log("response:",response);
+	                	console.log("response:",response.length);
+	                	var htmlContent = '';
+						for(var i=0; i<response.length; i++){
+							console.log(response[i]);
+							htmlContent += '<p>';
+							htmlContent += response[i].id;
+							htmlContent += response[i].name;
+							htmlContent += response[i].phone;
+							htmlContent += response[i].address;
+							htmlContent += '</p>';
+						}	                	
+						$('#response').html(htmlContent);
+	                },
+	                error: function(error) {
+	                    console.error('Error:', error);
+	                }
+				});
+			});
+            $('#reset').click(() => {
+            	console.log("1111");
+            	$("#response").empty();
             });
         });
     </script>
+</th:block>
 
-
-
-<!--
-	에이작스 통신
-	$.ajax({
-	    url: '접속할 페이지 주소',
-	    type: '전송 방식 (GET / POST)',
-	    data: '전송할 데이터 - 파라미터 문자열 key=value&key=value',
-	    dataType: '요청한 데이터 형식 (html / xml / json / jsonp)',
-	    timeout : '밀리세컨드단위 제한시간',
-	    cache : '이전요청에대한 캐쉬저장여부 (true=사용함, false=사용안함)',
-	    succes: function(data){ 
-	        // 전송에 성공하면 이 콜백 함수를 실행 (data 에는 응답받은 데이터가 저장된다)
-	    },
-	    error: function(){
-	        // 전송에 실패하면 이 콜백 함수를 실행
-	    }
-	});
--->
-
-
-
-
-</body>
 </html>

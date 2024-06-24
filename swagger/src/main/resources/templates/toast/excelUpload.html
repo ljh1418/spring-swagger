@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/defaultLayout}"
+      layout:fragment="content">
+      
+<input type="file" id="excelFileInput">
+<button id="uploadButton">Upload Excel</button>
+
+<div id="grid"></div>
+
+<script>
+
+
+$(document).ready(function() {
+	class CustomTextEditor {
+		  constructor(props) {
+		    const el = document.createElement('input');
+		    console.log('el:::',el);
+		    const { maxLength } = props.columnInfo.editor.options;
+
+		    el.type = 'text';
+		    el.maxLength = maxLength;
+		    el.value = String(props.value);
+
+		    this.el = el;
+		  }
+
+		  getElement() {
+		    return this.el;
+		  }
+
+		  getValue() {
+		    return this.el.value;
+		  }
+
+		  mounted() {
+		    this.el.select();
+		  }
+	}	
+	
+	
+  var grid = new tui.Grid({
+    el: document.getElementById('grid'),
+    columns: [
+      { header: 'Name', name: 'Name', editor: 'text' },
+      { header: 'Artist', name: 'Artist', editor: { type: CustomTextEditor, options: { maxLength: 10}}},
+      { header: 'Type', name: 'Type', /* formatter: 'listItemText', */ editor: { // formatter: 'listItemText' : 출력되는 데이터의 값이 옵션 리스트의 value값과 일치하면 text값 표시
+          type: 'select',
+          options: {
+            listItems: [
+              { text: 'Deluxe', value: '1' },
+              { text: 'EP', value: '2' },
+              { text: 'Single', value: '3' }
+            ]
+          }
+		}},
+      { header: 'Release', name: 'Release', /* formatter: 'listItemText', */ editor: {
+          type: 'checkbox',
+          options: {
+            listItems: [
+              { text: 'Pop', value: '1' },
+              { text: 'Rock', value: '2' },
+              { text: 'R&B', value: '3' },
+              { text: 'Electronic', value: '4' },
+              { text: 'etc.', value: '5' }
+            ]
+          }
+        }, copyOptions: {
+            useListItemText: true // formatter: 'listItemText' 와 관련된 기능으로 선택하는 값이 text
+        }},
+      { header: 'Genre', name: 'Genre', /* formatter: 'listItemText', */ editor: {
+          type: 'checkbox',
+          options: {
+            listItems: [
+                { text: '★☆☆', value: '1' },
+                { text: '★★☆', value: '2' },
+                { text: '★★★', value: '3' }
+            ]
+          }
+        }, copyOptions: {
+            useListItemText: true // formatter: 'listItemText' 와 관련된 기능으로 선택하는 값이 text
+        }}
+    ]
+  });
+
+  $('#uploadButton').on('click', function() {
+    var fileInput = document.getElementById('excelFileInput');
+	var jquery = $('#excelFileInput');
+    console.log('fileInput :',fileInput);
+    console.log('jquery :',jquery);
+    
+    var file = fileInput.files[0];
+    console.log('file :',file);
+
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      var data = new Uint8Array(e.target.result);
+      console.log('data :',data);
+      var workbook = XLSX.read(data, { type: 'array' });
+      console.log('workbook :',workbook);
+      var firstSheet = workbook.SheetNames[0];
+      console.log('firstSheet :',firstSheet);
+      var jsonData = XLSX.utils.sheet_to_json(workbook.Sheets[firstSheet]);
+      console.log('jsonData :',jsonData);
+
+      grid.resetData(jsonData);
+      console.log('grid :',grid);
+    };
+	
+    reader.readAsArrayBuffer(file);
+  });
+});
+</script>
+    
+    
+</html>

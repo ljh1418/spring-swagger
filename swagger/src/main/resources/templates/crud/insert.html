@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/defaultLayout}"
+      layout:fragment="content"
+>
+<h1>insert 페이지</h1>
+<form id="crudForm">
+	이메일 : <input type="text" id="userEmail" name="userEmail"> <br>
+	비밀번호 : <input type="text" id="userPassword" name="userPassword"> <br>
+	이름 : <input type="text" id="userName" name="userName"> <br>
+	<input type="submit" value="회원가입">
+</form>
+
+<script th:inline="javascript" type="text/javascript">
+
+	$(document).ready(() => {
+		$('#crudForm').on('submit', function(event) {
+			console.log('event:',event);
+			event.preventDefault(); // 폼의 기본 동작을 막습니다.
+			
+ 			var crudData ={
+				userEmail : $('#userEmail').val(),
+				userPassword :  $('#userPassword').val(),
+				userName :  $('#userName').val()
+ 			}
+			
+			console.log('crudData:',crudData);
+			
+			$.ajax({
+				type: 'post',
+				url: 'http://localhost:8081/crud/insert',
+ 				data: crudData,
+//  				dataType : 'jsonp', // get방식의 호출만가능
+				success: (data) => {
+					console.log('data:',data);
+					if(data == "success"){
+						alert("crud insert success!");			
+					}
+					$('#crudForm')[0].reset();    
+				},
+				error: function(error) {
+					console.error('Error:', error);
+				}
+			});	
+		});
+		
+	});
+</script>
+
+
+</html>

@@ -1,12 +1,25 @@
-spring:  
+spring: 
+  profiles:
+    active: local
+  application:
+    name: lee-test
   datasource:
-    
+    url: jdbc:mysql://${mysql.hostname:10.77.79.157}/msaportal
+    username: msaportal
+    password: msaportal
     driver-class-name: com.mysql.cj.jdbc.Driver
   #springfox 스웨거 적용
   #mvc:
   #  pathmatch:
   #    matching-strategy: ant_path_matcher
-  
+
+  #타임리프
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    mode: HTML
+    cache: false
+      
 #springdoc 스웨거 적용
 springdoc:
   packages-to-scan: com.example.demo.controller #검색할 패키지를 정의
@@ -24,9 +37,4 @@ springdoc:
 mybatis:
   mapper-locations: classpath:mapper/*.xml
   type-aliases-package: com.example.demo.domain
-  
-  
-  
-  
-  
   

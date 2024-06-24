@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<!--라이브러리 참조 : Thymeleaf & Thymeleaf Layout -->
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+
+<!-- replace, insert, include 중 하나 선택하여 사용 -->
+<!-- <th:block th:replace></th:block> -->
+
+<!-- 공통 CSS 영역 및 Header 영역을 참조합니다. -->
+<th:block th:replace="~{/fragments/header :: HeaderFragment}"></th:block>
+<!--공통 JS 영역을 참조합니다.-->
+<!-- <th:block th:replace="~{/fragments/config :: ConfigFragment}"></th:block> -->
+<body>
+	<header id="header">
+		<!-- 상단바 영역을 참조합니다.-->
+		<th:block th:replace="~{/fragments/top :: TopbarFragment}"></th:block>
+	</header >
+	<div id="container">
+		<aside id="sidebar">
+			<!-- 사이드바 영역을 참조합니다.-->
+			<th:block th:replace="~{/fragments/sidebar :: SidebarFragment}"></th:block>
+		</aside >
+		<div id="content">
+			<!-- Content 내용 영역을 참조합니다 -> 유동적으로 삽입할부분은 이렇게 -->
+			<th:block layout:fragment="content"></th:block>
+		</div>
+	</div>
+	<!--Footer 영역을 참조합니다.-->
+	<footer id="footer">
+		<th:block th:replace="~{/fragments/footer :: FooterFragment}"></th:block>
+	</footer>
+</body>	
+</html>

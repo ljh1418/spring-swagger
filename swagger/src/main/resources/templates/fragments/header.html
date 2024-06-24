@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<!-- Thymeleaf 선언 / headerFragment 임을 선언-->
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+	<!-- Header -->
+	<th:block th:fragment="HeaderFragment">
+		<head>
+			<!--Common Head-->
+			<meta charset="UTF-8">
+			<meta name="viewport" content="width=device-width, initial-scale=1.0">
+			<meta http-equiv="X-UA-Compatible" content="ie=edge">
+			<meta name="viewport" content="width=device-width, maximum-scale=1.0, minimum-scale=1, user-scalable=yes,initial-scale=1.0" />
+			<title></title>
+					
+			
+			<!-- jQuery 공식 CDN -->
+			<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+			<!-- Google CDN -->
+			<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> -->
+			
+			<!-- 타임리프 레이아웃 CSS -->
+			<link th:inline="css" th:href="@{/css/style.css}" rel="stylesheet" />
+			
+
+			<!-- 토스트 공식사이트에서 제공 -->			
+<!-- 			<link rel="stylesheet" href="https://uicdn.toast.com/grid/latest/tui-grid.css" /> -->
+<!-- 			<script src="https://uicdn.toast.com/grid/latest/tui-grid.js"></script> -->
+			
+			<!-- 토스트 엑셀 관련 스크립트 cdn -->			
+			<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script> -->
+			
+			
+			
+			
+			<!-- 토스트 그리드 js, css 내부에 설정 -->
+			<!-- 토스트그리드 기본 -->			
+			<link th:inline="css" th:href="@{/css/tui-grid.css}" rel="stylesheet" />
+			<script th:src="@{/js/tui-grid.js}"></script>
+			
+			<!-- 토스트그리드 엑셀관련 -->
+			<script th:src="@{/js/xlsx.full.min.js}"></script>
+			
+			
+			<!-- 토스트그리드 에디터 관련 -->
+			<link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.css" />
+			<script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
+			
+			
+<!-- 쳇지피티가 알려준거 오류 -->
+<!-- 			 TOAST UI Grid CSS -->
+<!-- 			<link rel="stylesheet" href="https://uicdn.toast.com/grid/latest/toastui-grid.css"> -->
+<!-- 			<!-- TOAST UI Grid JavaScript --> 
+<!-- 			<script src="https://uicdn.toast.com/grid/latest/toastui-grid.js"></script> -->
+<!-- 			<!-- xlsx (Excel 파일 처리 라이브러리) -->
+<!-- 			<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script> -->
+			
+		</head>				    		
+	</th:block>
+</html>

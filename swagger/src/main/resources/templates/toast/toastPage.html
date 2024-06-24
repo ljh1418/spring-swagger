@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/defaultLayout}"
+      layout:fragment="content">
+	
+	<!--  -->        
+
+	<div id="grid"></div>
+    <input type="file" id="fileInput">
+    <button id="uploadButton">엑셀 업로드</button>
+
+    <!-- TOAST UI Grid JavaScript -->
+<!--     <script src="https://uicdn.toast.com/grid/latest/toastui-grid.js"></script> -->
+    <!-- xlsx (Excel 파일 처리 라이브러리) -->
+<!--     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script> -->
+    <script>
+        $(document).ready(function() {
+            // TOAST UI Grid 초기화
+            const grid = new tui.Grid({
+                el: document.getElementById('grid'),
+                columns: [
+                    { header: 'ID', name: 'id' },
+                    { header: '이름', name: 'name' },
+                    { header: '나이', name: 'age' }
+                ]
+            });
+    		var arrData = [
+    			{	
+    				id : 'sunsin',
+    				name: '이순신',
+    				age: '20세'
+    			},
+    			{
+    				id : 'son',
+    				name: '손흥민',
+    				age: '30세'
+    			},
+    			{
+    				id : 'lee',
+    				name: '이강인',
+    				age: '15세'
+    			},
+    			{
+    				id : 'jiyun',
+    				name: '이지연',
+    				age: '26세'
+    			}
+    		];
+            grid.resetData( arrData );
+            console.log('grid ::: ',grid);
+            // 엑셀 파일 업로드 처리
+            $('#uploadButton').click(function() {
+                const fileInput = $('#fileInput')[0];
+                const file = fileInput.files[0];
+
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const data = new Uint8Array(e.target.result);
+                        const workbook = XLSX.read(data, { type: 'array' });
+                        const sheetName = workbook.SheetNames[0];
+                        const sheet = workbook.Sheets[sheetName];
+                        const jsonData = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+                        const formattedData = jsonData.slice(1).map(row => ({
+                            id: row[0],
+                            name: row[1],
+                            phone: row[2],
+                            address: row[3]
+                        }));
+                        grid.resetData(formattedData); // 그리드에 데이터 설정
+                    };
+                    reader.readAsArrayBuffer(file);
+                } else {
+                    alert('업로드할 파일을 선택해주세요.');
+                }
+            });
+        });
+    </script>
+    
+    
+</html>

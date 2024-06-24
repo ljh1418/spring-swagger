@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/defaultLayout}"
+      layout:fragment="content"
+>
+<h1>list 페이지</h1>
+<button id="btnTest">버튼테스트</button>
+<table>
+	<thead>
+		<tr>
+			<th>id</th>
+			<th>name</th>
+			<th>phone</th>
+			<th>address</th>
+		</tr>
+	</thead>
+	<tbody id="tableBody">
+	
+	</tbody>
+</table>
+
+<script th:inline="javascript" type="text/javascript">
+	$(document).ready(() => {
+		
+		// 리스트 조회 ajax 
+		$.ajax({
+		type: 'post',
+		url: '/user/list',
+		contentType: 'application/json',
+// 		dataType : 'json',
+	       success: (data) => {
+	    	console.log('data:',data);
+	    	console.log('data length',data.length)
+	       	var tableBody = $('#tableBody');
+	       	tableBody.empty();
+	       	for(var i=0; i<data.length; i++){
+	       		var rowData = "";
+	       		rowData += "<tr>";
+	       		rowData += "<td>" + data[i].id +"</td>";
+	       		rowData += "<td>" + data[i].name +"</td>";
+	       		rowData += "<td>" + data[i].phone +"</td>";
+	       		rowData += "<td>" + data[i].address +"</td>";
+ 				rowData += "<td><a href='/crud/viewPage" + data[i].id + "'>상세</a></td>";	       		
+	       		rowData += "<td><button class='delBtn' data-index='delBtn' data-id='"+data[i].id+"'>" + "삭제" + "</button></td>";
+	       		
+				// th:href는 Thymeleaf 템플릿 엔진의 문법이므로, AJAX로 동적으로 생성하는 HTML에서는 th:href를 사용할 수 없습니다. 
+				// get말고 post이기 떄문에 사용 x -> button 방식으로 변경
+				//rowData += "<td><a th:href='@{/crud/delete}" + data[i].id + "'>삭제</a></td>";
+// 				rowData += "<td><a href='http://localhost:8081/crud/delete" + data[i].id + "'>삭제</a></td>";
+	       		rowData += "</tr>";
+	       		tableBody.append(rowData);
+	       	}
+	       },
+	       error: function(error) {
+	           console.error('Error:', error);
+	       }
+		});
+		
+		// ajax 이벤트로 만든 button 클릭 방법
+		// 1. ajax 이벤트로 html을 생성해준 것이기 때문에 한번더 DOM객체를 읽어줘야한다. 그래야만 새로 생성된 html을 읽을 수 있는 것이다.
+		//$(document).on('click','.delBtn', function(){})
+		// 2. id값과 class값 둘다 입력 ?		
+		$('#tableBody').on('click', '.delBtn', function() {
+			var dataId = $(this).data('id');
+			console.log('dataId:',dataId);
+// 			$.ajax({
+// 			type: 'post'
+// 				url: 'http://localhost:8081/crud/delete',
+// 				data: dataId,
+// 				success: (data) => {
+// 					console.log('data:',data);
+// 					if(data == "success"){
+// 						alert("crud delete success!");			
+// 					}
+// 				},
+// 				error: function(error) {
+// 					console.error('Error:', error);
+// 				}
+// 			})
+		});
+
+	});
+</script>
+
+
+</html>
+

@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/defaultLayout}"
+      layout:fragment="content">
+<head>
+    <meta charset="UTF-8">
+    <title>test</title>
+
+</head>
+<body>
+
+	<div id="grid"></div>
+	
+	<button id="btdInsert">btdInsert</button>
+    <button id="addRowButton">행추가</button>
+    
+    
+	<script>
+		$(document).ready(() => {
+			
+			
+			const columns = [
+				{ header: '용어ID',name: 'termId', editor: 'text'},
+				{ header: '용어구분코드',name: 'termDvCd', editor: {
+					type: 'select',
+					options: {
+						listItems:[
+							{text: '셀렉트1', value: '1'},
+							{text: '셀렉트2', value: '2'}
+						]
+					}
+				}},
+				{ header: '한글단어명',name: 'hnglWdnm', editor: 'text'},
+				{ header: 'SYNO',name: 'syno', editor: 'text'},
+				{ header: '약어',name: 'acronym', editor: 'text'},
+				{ header: '전체명',name: 'fullNm', editor: 'text'},
+				{ header: '데이터크기',name: 'dataSize', editor: 'text'},
+				{ header: '데이터타입코드',name: 'dataTypeCd', editor: 'text'},
+				{ header: '설명',name: 'dscr', editor: 'text'},
+				{ header: '신청여부',name: 'applYn', editor: 'text'},
+				{ header: '삭제여부',name: 'delYn', editor: 'text'},
+				{ header: '등록일시',name: 'regDttm', editor: 'text'},
+				{ header: '등록사원번호',name: 'regEmpNo', editor: 'text'},
+				{ header: '수정프로그램ID',name: 'modPgmId', editor: 'text'},
+				{ header: '수정일시',name: 'modDttm', editor: 'text'},
+				{ header: '수정사원번호',name: 'modEmpNo', editor: 'text'}
+			];
+		
+			//그리드 생성
+		   const grid = new tui.Grid({
+	            el: document.getElementById('grid'),
+				rowHeaders:['checkbox'],
+	            columns: columns,
+	            data: [],
+	            scrollX: false,
+	            scrollY: false
+	        });
+			
+// 			const grid = new tui.Grid({
+// 				el: document.getElementById('grid'),
+// 				rowHeaders:['checkbox'],
+// 				columns: [
+// 					{ header: '용어ID',name: 'termId', editor: 'text'},
+// 					{ header: '용어구분코드',name: 'termDvCd', editor: {
+// 						type: 'select',
+// 						options: {
+// 							listItems:[
+// 								{text: '셀렉트1', value: '1'},
+// 								{text: '셀렉트2', value: '2'}
+// 							]
+// 						}
+// 					}},
+// 					{ header: '한글단어명',name: 'hnglWdnm', editor: 'text'},
+// 					{ header: 'SYNO',name: 'syno', editor: 'text'},
+// 					{ header: '약어',name: 'acronym', editor: 'text'},
+// 					{ header: '전체명',name: 'fullNm', editor: 'text'},
+// 					{ header: '데이터크기',name: 'dataSize', editor: 'text'},
+// 					{ header: '데이터타입코드',name: 'dataTypeCd', editor: 'text'},
+// 					{ header: '설명',name: 'dscr', editor: 'text'},
+// 					{ header: '신청여부',name: 'applYn', editor: 'text'},
+// 					{ header: '삭제여부',name: 'delYn', editor: 'text'},
+// 					{ header: '등록일시',name: 'regDttm', editor: 'text'},
+// 					{ header: '등록사원번호',name: 'regEmpNo', editor: 'text'},
+// 					{ header: '수정프로그램ID',name: 'modPgmId', editor: 'text'},
+// 					{ header: '수정일시',name: 'modDttm', editor: 'text'},
+// 					{ header: '수정사원번호',name: 'modEmpNo', editor: 'text'}
+// 				]
+// 			});
+			
+// 			var bdtData = {
+// 					termId: $('.termId').val(),
+// 		 			hnglWdnm: $('.hnglWdnm').val(),
+// 					syno : $('.syno').val(),
+// 					acronym : $('.acronym').val(),
+// 					fullNm : $('.fullNm').val(),
+// 					dataSize : $('.dataSize').val(),
+// 					dataTypeCd : $('.dataTypeCd').val(),
+// 					dscr : $('.dscr').val(),
+// 					applYn : $('.applYn').val(),
+// 					delYn : $('.delYn').val(),
+// 					regDttm : $('.regDttm').val(),
+// 					regEmpNo : $('.regEmpNo').val(),
+// 					modPgmId : $('.modPgmId').val(),
+// 					modDttm : $('.modDttm').val(),
+// 					modEmpNo : $('.modEmpNo').val()
+// 				}
+			
+			
+			
+			//인서트			
+			$('#btdInsert').click(function() {
+				const gridData = grid.getData();
+				console.log('gridData ::: ',gridData);
+				
+				 const selectedData = grid.getCheckedRows();
+				 console.log('selectedData:::',selectedData);
+				 
+				// 데이터가 배열인지 확인
+// 			     if (!Array.isArray(selectedData)) {
+// 		                console.error("Expected an array but got: ", selectedData);
+// 		                return;
+// 		            }
+			     
+			     
+// 			     // 배열의 각 요소가 객체인지 확인
+// 		            if (selectedData.some(item => typeof item !== 'object')) {
+// 		                console.error("Expected array of objects but got: ", selectedData);
+// 		                return;
+// 		            }
+				
+// 				if(selectedData.length > 0){
+					console.log("선택된데이터 있음!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+					$.ajax({
+						url: '/btd/regBtd',
+		                type: 'POST',
+		                contentType: 'application/json',
+		                data: JSON.stringify(selectedData),
+//	 	                dataType : 'json',
+		                success: function(response) {
+		                	console.log("response:",response);
+							grid.resetData(response);
+		                },
+		                error: function(error) {
+		                    console.error('Error:', error);
+		                }
+					});	
+// 				}
+			
+			});
+			
+// 			$('#addRowBtn').click(function() {
+// 			     var newRow = {
+// 			    		termId:'',
+// 			 			hnglWdnm:'',
+// 						syno:'',
+// 						acronym:'',
+// 						fullNm:'',
+// 						dataSize:'',
+// 						dataTypeCd:'',
+// 						dscr:'',
+// 						applYn:'',
+// 						delYn:'',
+// 						regDttm:'',
+// 						regEmpNo:'',
+// 						modPgmId:'',
+// 						modDttm:'',
+// 						modEmpNo:''
+// 			     };
+// 			     console.log(newRow);
+// 			     grid.appendRow(newRow, {
+			    	 
+// 			         at: 0, // 원하는 위치에 행을 추가 (여기서는 첫 번째 행으로 추가)
+// 			         focus: true // 추가된 행으로 포커스를 이동
+// 			     });
+// 			 });
+			
+       	// 행 추가 버튼 클릭 이벤트
+        document.getElementById('addRowButton').addEventListener('click', function() {
+            grid.appendRow({
+	    		termId:'',
+	    		termDvCd:'',
+	 			hnglWdnm:'',
+				syno:'',
+				acronym:'',
+				fullNm:'',
+				dataSize:'',
+				dataTypeCd:'',
+				dscr:'',
+				applYn:'',
+				delYn:'',
+				regDttm:'',
+				regEmpNo:'',
+				modPgmId:'',
+				modDttm:'',
+				modEmpNo:''
+            });
+        });
+			
+		      // 전체 체크박스 상태 관리
+//             $(document).on('change', '.grid-checkbox', function() {
+//                 var checked = $(this).is(':checked');
+//                 var rowKey = $(this).closest('tr').data('row-key');
+//                 grid.setValue(rowKey, 'select', checked);
+//             });
+         		
+        });
+
+
+	</script>
+	
+</body>
+</html>

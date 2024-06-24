@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/defaultLayout}"
+      layout:fragment="content">
+
+	<div id="grid"></div>
+    <button id="addRowButton">Add Row</button>
+
+	
+	    <link rel="stylesheet" href="https://uicdn.toast.com/grid/latest/tui-grid.css">
+    <script src="https://uicdn.toast.com/grid/latest/tui-grid.js"></script>
+	
+    <script>
+        $(document).ready(function() {
+            const grid = new tui.Grid({
+                el: document.getElementById('grid'),
+                data: [
+                    { id: 1, name: 'John', age: 30 },
+                    { id: 2, name: 'Jane', age: 25 },
+                    { id: 3, name: 'Doe', age: 40 }
+                ],
+                columns: [
+                    { name: 'id', header: 'ID', readOnly: true }, // id 칼럼은 항상 readonly
+                    { name: 'name', header: 'Name', readOnly: false },
+                    { name: 'age', header: 'Age' }
+                ]
+            });
+        });
+//         grid.resetData(data);
+        
+        // 버튼 클릭 시 새로운 행 추가
+        $('#addRowButton').on('click', function() {
+            const newRow = { id: grid.getRowCount() + 1, name: '', age: 0 };
+            grid.appendRow(newRow, { focus: true });
+            
+            // 특정 칼럼의 readonly 상태를 명확히 설정
+            const rowKey = grid.getRowCount() - 1;
+
+            // rowKey를 이용해 특정 칼럼의 readOnly 속성을 설정
+            grid.getColumns().forEach(column => {
+                if (column.name === 'id') {
+                    grid.setColumnValues(column.name, rowKey, { readOnly: true });
+                } else {
+                    grid.setColumnValues(column.name, rowKey, { readOnly: false });
+                }
+            });
+        });
+        
+    </script>
+    
+    
+</html>
