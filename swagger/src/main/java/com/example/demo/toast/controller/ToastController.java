@@ -36,7 +36,7 @@ public class ToastController {
 	public ModelAndView toastEditor() {
 		System.out.println("toastEditor() >>>>>>>>>>>>>>>>");
 		ModelAndView mav = new ModelAndView();
-		mav.setViewName("/toast/editor");
+		mav.setViewName("/toast/editorOption");
 		return mav;
 	}
 	
@@ -48,6 +48,16 @@ public class ToastController {
 		mav.setViewName("/toast/toastOption");
 		return mav;
 	}
+	
+	//셀렉트박스
+	@GetMapping("/toast/selectBox")
+	public ModelAndView selectBox() {
+		System.out.println("selectBox() >>>>>>>>>>>>>>>>");
+		ModelAndView mav = new ModelAndView();
+		mav.setViewName("/toast/toastSelectBox");
+		return mav;
+	}	
+
 	
 	
 }

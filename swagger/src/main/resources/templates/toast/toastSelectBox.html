@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/defaultLayout}"
+      layout:fragment="content">
+<head>
+    <meta charset="UTF-8">
+    <title>test</title>
+
+</head>
+  <style>
+    /* 셀렉트 박스 스타일 커스터마이징 */
+    .editor-selectbox {
+      width: 100%;
+      height: 100%;
+      border: none;
+      background-color: transparent;
+      font-family: inherit;
+      font-size: inherit;
+      padding: 0;
+      margin: 0;
+      box-sizing: border-box;
+    }
+  </style>
+<body>
+
+	<div id="grid"></div>
+	
+	<button id="btdInsert">btdInsert</button>
+    <button id="addRowButton">행추가</button>
+    
+    
+	<script>
+	const data = [
+		  { id: 1, name: 'Alice', status: 'active' },
+		  { id: 2, name: 'Bob', status: 'inactive' }
+		];
+
+		// 셀렉트박스 옵션
+		const statusOptions = [
+		  { text: 'Active', value: 'active' },
+		  { text: 'Inactive', value: 'inactive' }
+		];
+
+		// 사용자 정의 렌더러
+		class SelectBoxRenderer {
+		  constructor(props) {
+		    const el = document.createElement('select');
+		    el.className = 'editor-selectbox';
+
+		    statusOptions.forEach(option => {
+		      const optionElement = document.createElement('option');
+		      optionElement.value = option.value;
+		      optionElement.text = option.text;
+		      el.appendChild(optionElement);
+		    });
+
+		    el.value = props.value;
+
+		    this.el = el;
+		    this.el.addEventListener('change', () => {
+		      props.grid.setValue(props.rowKey, props.columnInfo.name, el.value);
+		    });
+		  }
+
+		  getElement() {
+		    return this.el;
+		  }
+
+		  render(props) {
+		    this.el.value = props.value;
+		  }
+		}
+
+		// 컬럼 설정
+		const columns = [
+		  { header: 'ID', name: 'id', align: 'center' },
+		  { header: 'Name', name: 'name', align: 'center' },
+		  { 
+		    header: 'Status', 
+		    name: 'status',
+		    align: 'center',
+		    renderer: {
+		      type: SelectBoxRenderer
+		    }
+		  }
+		];
+
+		// 그리드 초기화
+		const grid = new tui.Grid({
+		  el: document.getElementById('grid'),
+		  data: data,
+		  columns: columns,
+		  rowHeaders: ['rowNum'],
+		  bodyHeight: 'fitToParent',
+		  rowHeight: 'auto'
+		});
+
+
+	</script>
+	
+</body>
+</html>
