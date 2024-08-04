@@ -4,19 +4,246 @@
       layout:decorate="~{layout/defaultLayout}"
       layout:fragment="content">
       
-  <div id="editor"></div>
+  <div id="grid"></div>
+	
+	
+<style>
+.input-dts{
+	border-color: red;
+}
 
+.select-dts{
+	min-width: 85px; opacity: 1; top: 47px; left: 140px;
+}
+</style>	
   <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      const content = "초기값 설정"; // 초기값 설정
-      const editor = new toastui.Editor({
-        el: document.querySelector('#editor'),
-        previewStyle: 'vertical',
-        height: '500px',
-        initialValue: content
-      });
-    });
+  $(document).ready(() => {
+
+	   const columns = [
+	      { header: '신청여부',name: 'applYn', resizable: true, sortable: true, validation: {maxLength: 1}, formatter: 'listItemText', editor: {
+	         type: 'select',
+	         options: {
+	            listItems:[
+	               {text: 'N', value: '1'},
+	               {text: 'Y', value: '2'}
+	            ]
+	         }
+	      }},
+	      { header: '용어구분코드',name: 'termDvCd', resizable: true, sortable: true, validation: {maxLength: 20},editor:{
+	         type:'select',
+	         options: {
+	            listItems:[
+	               {text: '단어', value: '1'},
+	               {text: '도메인', value: '2'},
+	               {text: '용어', value: '3'}
+	            ]
+	         }
+	      }
+	      },
+
+	      { header:  '한글단어명', name: 'hnglWdnm', resizable: true, sortable: true, validation: {maxLength: 200}, editor: 'text'},
+	      { header: '전체명',name: 'fullNm', resizable: true, sortable: true, validation: {maxLength: 200} },
+	      { header: '약어',name: 'acronym', resizable: true, sortable: true, validation: {maxLength: 200}, editor: 'text'},
+	      { header: '데이터타입',name: 'dataTypeCd', resizable: true, sortable: true, validation: {maxLength: 20}, formatter: 'listItemText', editor: {
+	         type: 'select',
+	         options: {
+	            listItems:[
+	               {text: '-선택-', value: '0'},
+	               {text: 'NUMBER', value: '1'},
+	               {text: 'VARCHAR', value: '2'},
+	               {text: 'DATE', value: '3'}
+	            ]
+	         }
+	      }},
+	      { header: '데이터 길이',name: 'dataSize', resizable: true, sortable: true, validation: {maxLength: 100}, editor: 'text'},
+	      { header: '동의어',name: 'syno', resizable: true, sortable: true, validation: {maxLength: 200}, editor: 'text'},
+	      { header: '설명',name: 'dscr', resizable: true, sortable: true, validation: {maxLength: 4000}, editor: 'text'}
+	   ];
+	   
+	   const gridData = [
+		   {
+		      applYn: '1', // N
+		      termDvCd: '1', // 단어
+		      hnglWdnm: '사과',
+		      fullNm: 'Apple',
+		      acronym: 'APPL',
+		      dataTypeCd: '2', // VARCHAR
+		      dataSize: '100',
+		      syno: '애플',
+		      dscr: '사과는 과일의 일종입니다.'
+		   },
+		   {
+		      applYn: '2', // Y
+		      termDvCd: '2', // 도메인
+		      hnglWdnm: '사과나무',
+		      fullNm: 'Apple Tree',
+		      acronym: 'ATREE',
+		      dataTypeCd: '1', // NUMBER
+		      dataSize: '200',
+		      syno: '사과목',
+		      dscr: '사과나무는 사과를 생산하는 나무입니다.'
+		   },
+		   {
+		      applYn: '1', // N
+		      termDvCd: '3', // 용어
+		      hnglWdnm: '빅데이터',
+		      fullNm: 'Big Data',
+		      acronym: 'BIGDATA',
+		      dataTypeCd: '3', // DATE
+		      dataSize: '300',
+		      syno: '대용량 데이터',
+		      dscr: '빅데이터는 대량의 데이터 집합을 의미합니다.'
+		   }
+		];
+	   
+	   //그리드 생성
+	   const grid = new tui.Grid({
+	        el: document.getElementById('grid'),
+	      rowHeaders:['checkbox'],
+	        columns: columns,
+	        //data: [],
+	        data: gridData,
+	        scrollX: false,
+	        scrollY: false
+	    });
+	   
+
+	   	
+	   	//var tableHtml = $(".tui-grid-table")[3];
+	   	//console.log('tableHtml:',tableHtml);
+	   	
+	   	// 그리드테이블 htmlTag
+	   	var tableHtml = $(".tui-grid-table").eq(3);
+	   	console.log('tableHtml:',tableHtml);
+	   	 
+	   	var tbodyHtml = tableHtml.find("tbody");
+	   	console.log('tbodyHtml:',tbodyHtml);
+	   	
+	   	var trHtml = tbodyHtml.find("tr");
+	   	console.log('trHtml:',trHtml);
+	   	
+		var tdHtml = trHtml.find("td");
+	   	console.log('tdHtml:',tdHtml);
+	   	
+	   	
+	   	var hnglWdnm = trHtml.find("td[data-column-name='hnglWdnm']");
+	   	console.log('hnglWdnm:', hnglWdnm);
+	   	
+	   	
+	   	var termDvCd = trHtml.find("td[data-column-name='termDvCd']");
+	   	console.log('termDvCd:',termDvCd);
+	   	console.log('termDvCd classList:',termDvCd[0].classList);
+	   	
+// 	   	return false;
+// 	   	<div class="tui-select-box-input tui-select-box-open" tabindex="0">
+// 	   		<p class="tui-select-box-placeholder">단어</p>
+// 	   	<span class="tui-select-box-icon">select</span></div>
+	   	
+	   	
+	   	// 특정 셀의 Element 가져오기
+//  		var cellElement = grid.getElement(rowIndex, columnIndex);
+// 	   	console.log('cellElement:',cellElement);
+
+// 		// 클래스 추가하기
+// 		$(cellElement).addClass('highlighted-cell');
+	   	
+	   	
+	   	// 한글명 input값으로 변환
+	   	hnglWdnm.each(function() {
+	   	    console.log('input : $(this).text():',$(this).text());
+	   	    var inputElement = $("<input>", {
+	   	        type: "text", // Set the type of input element
+	   	        value: $(this).text(), // Set the initial value of the input to the current text content of <td>
+	   	    	class: "input-dts"
+	   	    });
+	   	    // Replace the content of <td> with the newly created <input> element
+	   	    $(this).html(inputElement);
+	   	});
+	   	
+	   	//용어구분코드 select값으로 변환
+	   	termDvCd.each(function() {
+	   		console.log('select : $(this).text():',$(this).text());
+	   	    var selectElement = $("<input>", {
+	   	        type: "text", // Set the type of input element
+	   	        value: $(this).text(), // Set the initial value of the input to the current text content of <td>
+	   	    	class: "select-dts"
+	   	    });
+	   	 	$(this).html(selectElement);
+	   	});
+	   	
+	   	
+// 	   	termDvCd.each(function() {
+// 	   		termDvCd.addClass('tui-grid-editor-select-box-layer tui-select-box tui-select-box-input tui-select-box-open');
+// 	   	});
+
+	   	
+	   	
+		
+	   	
+	   	
+
+	   //$(".tui-grid-table").css("backgroundColor", "yellowgreen");
+	   	
+
+
+	   //그리드 행추가 버튼
+	   $('#addRowButton').on('click', () => {
+	        const newRow = {
+	         id:grid.getRowCount(),
+	           applYn: '',
+	           name:'',
+	           termDvCd: '',
+	           hnglWdnm: '',
+	           fullNm: '',
+	           acronym: '',
+	           dataTypeCd: '',
+	           dataSize: '',
+	           syno: '',
+	           dscr: ''
+	        };
+	   });
+	   
+	   
+	   
+	   
+	   
+  });
   </script>
     
     
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
